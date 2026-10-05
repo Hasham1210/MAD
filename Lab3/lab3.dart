@@ -41,7 +41,66 @@ class MenuItem {
     //TASK 3.2::
      MenuItem.fromString(String text) : name = text.split(':')[0],
         price = int.parse(text.split(':')[1]);
+//STEP :8::
+        @override
+String toString() => '$name (Rs $price)';
 }
+//TASK 10:::::->
+class Coupon {
+  static final Map<String, Coupon> _cache = {};
+
+  final String code;
+  final int percent;
+  final int minSpend;
+
+  Coupon(this.code, this.percent)
+      : minSpend = percent * 70,
+        assert(
+          percent >= 1 && percent <= 50,
+          'percent must be between 1 and 50',
+        );
+
+  factory Coupon.fromCode(String code) {
+    return _cache.putIfAbsent(
+      code,
+      () => Coupon(code, couponPercent),
+    );
+  }
+
+  int discountOn(int amount) {
+    if (amount >= minSpend) {
+      return amount * percent ~/ 100;
+    }
+
+    return 0;
+  }
+}
+
+
+//PART 08
+List<MenuItem> buildMenu() {
+  return [
+    for (int k = 0; k < 4; k++)
+      MenuItem.fromString(
+        '${menu[(u + 3 * k) % 10]}:${priceOf((u + 3 * k) % 10)}',
+      ),
+  ];
+}
+
+//TASK :: 09
+List<OrderLine> buildReceipt() {
+  List<MenuItem> items = buildMenu();
+
+  return [
+    for (int k = 0; k < 3; k++)
+      OrderLine(
+        items[k],
+        1 + (t + k) % 4,
+      ),
+  ];
+}
+
+
 //STEP ::04:
 class OrderLog {
     //Underscore makes them library private in Dart.
@@ -222,6 +281,64 @@ void step7() {
   print('Step 7: paid order -> ${card.balance}');
 }
 
-void step8() { print('--- Step 8 ---'); }
-void step9() { print('--- Step 9 ---'); }
-void step10() { print('--- Step 10 ---'); }
+void step8() {
+  List<MenuItem> items = buildMenu();
+
+  MenuItem priciest = items.reduce(
+    (a, b) => a.price > b.price ? a : b,
+  );
+
+  int sum = items.fold(
+    0,
+    (total, item) => total + item.price,
+  );
+
+  print('Step 8: menu = $items');
+  print('Step 8: priciest = ${priciest.name}');
+  print('Step 8: sum = $sum');
+}
+
+
+void step9() {
+  List<OrderLine> receipt = buildReceipt();
+
+  int receiptTotal = 0;
+
+  for (OrderLine line in receipt) {
+    print('Step 9: ${line.label} = ${line.grand}');
+
+    OrderLog().add('receipt: ${line.label}');
+
+    receiptTotal += line.grand;
+  }
+
+  print('Step 9: receipt total = $receiptTotal');
+  print('Step 9: log size = ${OrderLog().entries.length}');
+}
+
+
+void step10() {
+  String code = 'CAFE${seed.toString().padLeft(2, '0')}';
+
+  Coupon c1 = Coupon.fromCode(code);
+  Coupon c2 = Coupon.fromCode(code);
+
+  int receipt = 0;
+
+  for (OrderLine line in buildReceipt()) {
+    receipt += line.grand;
+  }
+
+  int discount = c1.discountOn(receipt);
+  int payable = receipt - discount;
+
+  print(
+    'Step 10: $code gives ${c1.percent}% off, min spend ${c1.minSpend}',
+  );
+
+  print('Step 10: cached? ${identical(c1, c2)}');
+
+  print(
+    'Step 10: receipt $receipt, discount $discount, payable $payable',
+  );
+}
