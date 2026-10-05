@@ -86,6 +86,85 @@ Map<String, int> buildStock() {
       b['title'] as String: b['copies'] as int
   };
 }
+
+
+
+
+//part : 4::
+class Box<T> {
+  T value;
+
+  Box(this.value);
+}
+
+
+
+T firstOr<T>(List<T> items, T fallback) {
+  if (items.isNotEmpty) {
+    return items.first;
+  }
+
+  return fallback;
+}
+
+class Pair<A, B> {
+  A first;
+  B second;
+
+  Pair(this.first, this.second);
+
+  @override
+  String toString() {
+    return '($first, $second)';
+  }
+}
+
+
+ //-->:: Part 5 
+
+class BookNotFoundException implements Exception {
+  final String title;
+
+  BookNotFoundException(this.title);
+}
+
+class BookNotAvailableException implements Exception {
+  final String title;
+
+  BookNotAvailableException(this.title);
+}
+
+void checkOut(Map<String, int> stock, String title) {
+  if (!stock.containsKey(title)) {
+    throw BookNotFoundException(title);
+  }
+
+  if (stock[title]! <= 0) {
+    throw BookNotAvailableException(title);
+  }
+
+  stock[title] = stock[title]! - 1;
+}
+
+Map<String, dynamic> findBook(String title) {
+  return books.firstWhere(
+    (book) => book['title'] == title,
+  );
+}
+
+
+//::PART ## 06
+Future<String> fetchBookOfTheDay() async {
+  await Future.delayed(Duration(seconds: 1));
+
+  return 'Dart in Action';
+}
+
+Future<String> fetchBroken() async {
+  await Future.delayed(Duration(milliseconds: 500));
+
+  throw Exception('Server down');
+}
 void main() async {
  part1();
  part2();
@@ -210,9 +289,71 @@ print('Only in A: ${a.difference(b)}');
 }
 
 
-void part4() { print('--- Part 4 ---'); }
-void part5() { print('--- Part 5 ---'); }
-Future<void> part6() async { print('--- Part 6 ---'); }
+void part4() {
+  print('--- Part 4 ---');
+
+  var intBox = Box<int>(5);
+  var stringBox = Box<String>('dart');
+
+  print('Box<int>: ${intBox.value}');
+  print('Box<String>: ${stringBox.value}');
+
+  // intBox.value = 'hello';
+
+  print(firstOr(['Dart in Action', 'Clean Code'], 'none'));
+
+  print(firstOr<String>([], 'z'));
+
+  print(Pair('Dart in Action', 3));
+}
+
+
+void part5() {
+  print('--- Part 5 ---');
+
+  var stock = buildStock();
+
+  for (var title in [
+    'Dart in Action',
+    'Flutter Basics',
+    'Unknown Book'
+  ]) {
+    try {
+      checkOut(stock, title);
+
+      print('Checked out: $title');
+    } on BookNotAvailableException {
+      print('Sorry: "$title" has no copies left');
+    } on BookNotFoundException {
+      print('Not found: "$title"');
+    } finally {
+      print('Transaction logged.');
+    }
+  }
+
+  print('Copies left of Dart in Action: ${stock['Dart in Action']}');
+
+  try {
+    findBook('Missing');
+  } on StateError {
+    print('Search failed: no such book');
+  }
+}
+Future<void> part6() async {
+  print('--- Part 6 ---');
+
+  print('Fetching...');
+
+  var book = await fetchBookOfTheDay();
+
+  print('Book of the day: $book');
+
+  try {
+    await fetchBroken();
+  } catch (e) {
+    print('Fetch failed: $e');
+  }
+}
 
 
 
