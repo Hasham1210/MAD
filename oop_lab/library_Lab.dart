@@ -149,6 +149,25 @@ mixin Renewable {
     return true;
   }
 }
+//task 6::
+enum MemberType {
+  student(3, 50),
+  faculty(10, 20),
+  guest(1, 0);
+
+  final int maxLoans;
+  final int discountPercent;
+
+  const MemberType(this.maxLoans, this.discountPercent);
+  // TODO: int applyDiscount(int fee) -> fee minus discountPercent % of fee
+ //:
+
+
+  int applyDiscount(int fee) {
+    return fee - (fee * discountPercent ~/ 100);
+  }
+}
+
 
 
 void main() {
@@ -263,8 +282,25 @@ void step5() {
 
 void step6() {
   print('--- Step 6 ---');
-}
 
+  MemberType member = MemberType.student;
+  int fee = mainBook().lateFee(daysLate);
+
+  print(
+    'Step 6: member type = ${member.name} '
+    '(index ${member.index})',
+  );
+  print('Step 6: max loans = ${member.maxLoans}');
+  print(
+    'Step 6: book fee $fee -> '
+    '${member.applyDiscount(fee)} after discount',
+  );
+
+
+
+   // MemberType.student is more safe than the string ->student because enum can be
+   // values to predefined member types
+}
 void step7() {
   print('--- Step 7 ---');
 }
