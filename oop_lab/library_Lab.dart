@@ -31,27 +31,34 @@ final int renewAttempts = 2 + u; // renewal attempts made in Step 5
 final int shelfSize = 3 + u % 4; // items on the shelf in Steps 9-10
 // ===========================================================================
 
-//1.1
-class LibraryItem {
+// 1.1 and 3.1
+abstract class LibraryItem {
   final String title;
   final int year;
 
   LibraryItem(this.title, this.year);
 
-//2.1
   String describe() => '$title ($year)';
+
+  int lateFee(int days);
 }
 
-//1.2
+// 1.2 2.2 3.2
 class Book extends LibraryItem {
   final int pages;
 
   Book(super.title, super.year, this.pages);
-//2.2
+
   @override
   String describe() => '${super.describe()}, $pages pages';
+
+  @override
+  int lateFee(int days) {
+    return days * feePerDay;
+  }
 }
-//2.3
+
+// 1.3 2.3 3.3
 class Magazine extends LibraryItem {
   final int issue;
 
@@ -59,6 +66,26 @@ class Magazine extends LibraryItem {
 
   @override
   String describe() => '${super.describe()}, issue $issue';
+
+  @override
+  int lateFee(int days) {
+    return days * (feePerDay ~/ 2);
+  }
+}
+
+// 3.22
+class Dvd extends LibraryItem {
+  final int minutes;
+
+  Dvd(super.title, super.year, this.minutes);
+
+  @override
+  String describe() => '${super.describe()}, $minutes min';
+
+  @override
+  int lateFee(int days) {
+    return days * feePerDay * 2;
+  }
 }
 
 //2.4:
@@ -67,6 +94,11 @@ Magazine mainMagazine() {
   return Magazine(titles[i], yearOf(i), 1 + (t + u) % 12);
 }
 
+// Step 3: Create the main DVD
+Dvd mainDvd() {
+  int i = (u + 2) % 10;
+  return Dvd(titles[i], yearOf(i), 120);
+}
 
 //1.3
 Book mainBook() {
@@ -112,7 +144,16 @@ void step2() {
 
 void step3() {
   print('--- Step 3 ---');
+
+  Book book = mainBook();
+  Magazine magazine = mainMagazine();
+  Dvd dvd = mainDvd();
+
+  print('Step 3: Book fee = Rs ${book.lateFee(daysLate)}');
+  print('Step 3: Magazine fee = Rs ${magazine.lateFee(daysLate)}');
+  print('Step 3: DVD fee = Rs ${dvd.lateFee(daysLate)}');
 }
+
 
 void step4() {
   print('--- Step 4 ---');
