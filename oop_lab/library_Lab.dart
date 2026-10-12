@@ -37,6 +37,9 @@ class LibraryItem {
   final int year;
 
   LibraryItem(this.title, this.year);
+
+//2.1
+  String describe() => '$title ($year)';
 }
 
 //1.2
@@ -44,7 +47,26 @@ class Book extends LibraryItem {
   final int pages;
 
   Book(super.title, super.year, this.pages);
+//2.2
+  @override
+  String describe() => '${super.describe()}, $pages pages';
 }
+//2.3
+class Magazine extends LibraryItem {
+  final int issue;
+
+  Magazine(super.title, super.year, this.issue);
+
+  @override
+  String describe() => '${super.describe()}, issue $issue';
+}
+
+//2.4:
+Magazine mainMagazine() {
+  int i = (u + 1) % 10;
+  return Magazine(titles[i], yearOf(i), 1 + (t + u) % 12);
+}
+
 
 //1.3
 Book mainBook() {
@@ -81,6 +103,11 @@ void step1() {
 
 void step2() {
   print('--- Step 2 ---');
+
+  print('Step 2: ${mainBook().describe()}');
+  print('Step 2: ${mainMagazine().describe()}');
+
+  // If the function: describe() would be as descibe() ..Then  it may create a different another method instead of overriding
 }
 
 void step3() {
