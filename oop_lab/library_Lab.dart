@@ -55,10 +55,10 @@ abstract class Borrowable {
 // 1.2 2.2 3.2
 
 // Steps 4.2
-class Book extends LibraryItem implements Borrowable {
+//5.2
+class Book extends LibraryItem with Renewable implements Borrowable {
   final int pages;
 
-  // Private field: false means the book is not borrowed.
   bool _out = false;
 
   Book(super.title, super.year, this.pages);
@@ -102,7 +102,8 @@ class Magazine extends LibraryItem {
 }
 
 // 3.22
-class Dvd extends LibraryItem {
+//5.2
+class Dvd extends LibraryItem with Renewable {
   final int minutes;
 
   Dvd(super.title, super.year, this.minutes);
@@ -132,6 +133,23 @@ Dvd mainDvd() {
 Book mainBook() {
   return Book(titles[u], yearOf(u), 100 + 3 * seed);
 }
+
+
+
+
+//5.1::
+mixin Renewable {
+  int renewals = 0;
+
+  bool renew(int limit) {
+    if (renewals >= limit) {
+      return false;
+    }
+    renewals++;
+    return true;
+  }
+}
+
 
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
@@ -219,6 +237,28 @@ void step4() {
 
 void step5() {
   print('--- Step 5 ---');
+  Book book = mainBook();
+
+  int ok = 0;
+
+  for (int i = 0; i < renewAttempts; i++) {
+    if (book.renew(renewLimit)) {
+      ok++;
+    }
+  }
+
+  print(
+    'Step 5: renewed $ok of $renewAttempts attempts '
+    '(limit $renewLimit)',
+  );
+
+  print('Step 5: renew once more? ${book.renew(renewLimit)}');
+
+  print('Step 5: dvd can renew too? ${mainDvd().renew(1)}');
+
+//  mixin here.. allows the  Book and Dvd to share renewal ability
+//without giving Magazine a renew() methiod it does not need This avoids adding 
+//unrelated functionality to eeach of trhe library item.
 }
 
 void step6() {
