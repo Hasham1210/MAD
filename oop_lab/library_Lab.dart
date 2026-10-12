@@ -170,6 +170,21 @@ enum MemberType {
 
 
 
+// 7::
+extension MoneyText on int {
+  String get rs => 'Rs $this';
+}
+
+extension Initials on String {
+  String get initials =>
+      split(' ').map((word) => word[0]).join();
+}
+extension ShelfMath on List<LibraryItem> {
+  int totalLateFee(int days) {
+    return fold(0, (sum, item) => sum + item.lateFee(days));
+  }
+}
+
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
   step1();
@@ -303,6 +318,38 @@ void step6() {
 }
 void step7() {
   print('--- Step 7 ---');
+
+  // Select the member type using the roll-number seed.
+  MemberType type = MemberType.values[seed % 3];
+
+  // Calculate the discounted fee for the main book.
+  int fee = mainBook().lateFee(daysLate);
+  int discountedFee = type.applyDiscount(fee);
+
+  print('Step 7: ${discountedFee.rs}');
+
+  // Get the initials of the title at index u.
+  print(
+    'Step 7: initials of "${titles[u]}" = '
+    '${titles[u].initials}',
+  );
+
+  // Calculate the total late fee for a book, magazine, and DVD.
+  List<LibraryItem> shelf = [
+    mainBook(),
+    mainMagazine(),
+    mainDvd(),
+  ];
+
+  int totalFee = shelf.totalLateFee(daysLate);
+
+  print(
+    'Step 7: shelf fee for $daysLate days = '
+    '${totalFee.rs}',
+  );
+
+  
+  // Extension methods let us caal method directly on  int value that makEs the code easier to understand..
 }
 
 void step8() {
