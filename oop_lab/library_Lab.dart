@@ -43,9 +43,23 @@ abstract class LibraryItem {
   int lateFee(int days);
 }
 
+// Step 4.1
+abstract class Borrowable {
+  bool get isAvailable;
+
+  void borrow();
+
+  void giveBack();
+}
+
 // 1.2 2.2 3.2
-class Book extends LibraryItem {
+
+// Steps 4.2
+class Book extends LibraryItem implements Borrowable {
   final int pages;
+
+  // Private field: false means the book is not borrowed.
+  bool _out = false;
 
   Book(super.title, super.year, this.pages);
 
@@ -55,6 +69,20 @@ class Book extends LibraryItem {
   @override
   int lateFee(int days) {
     return days * feePerDay;
+  }
+
+  // Step 4.2
+  @override
+  bool get isAvailable => !_out;
+
+  @override
+  void borrow() {
+    _out = true;
+  }
+
+  @override
+  void giveBack() {
+    _out = false;
   }
 }
 
@@ -152,11 +180,41 @@ void step3() {
   print('Step 3: Book fee = Rs ${book.lateFee(daysLate)}');
   print('Step 3: Magazine fee = Rs ${magazine.lateFee(daysLate)}');
   print('Step 3: DVD fee = Rs ${dvd.lateFee(daysLate)}');
+
+
+   // LibraryItem is abstract class so we cannot create its object at this tieme..
+  // It is designed to give us a structure for subclasses We must create an object
+  // of a concrete subclass same like.. Book - Magazine - Dvd
 }
 
 
 void step4() {
   print('--- Step 4 ---');
+
+  Book book = mainBook();
+
+  print('Step 4: available? ${book.isAvailable}');
+
+  book.borrow();
+  print('Step 4: after borrow? ${book.isAvailable}');
+
+  book.giveBack();
+  print('Step 4: after return? ${book.isAvailable}');
+
+  List<LibraryItem> items = [
+    book,
+    mainMagazine(),
+    mainDvd(),
+  ];
+
+  for (LibraryItem item in items) {
+    print(
+      'Step 4: ${item.runtimeType} borrowable? ${item is Borrowable}',
+    );
+  }
+
+// If Book extended the class as Borrowable then it may inherit implementation from Borrowable
+// if it wwas a concrete class with built methods
 }
 
 void step5() {
