@@ -1,5 +1,5 @@
 // main.dart - Study Tracker lab
-// import 'dart:async';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 
@@ -80,7 +80,11 @@ class HomePage extends StatelessWidget {
             const Tally(),
             const SizedBox(height: 12),
 
-            // Step 7: Demonstrates the missing setState bug.
+            // Step 8: Countdown timer.
+            const Countdown(),
+            const SizedBox(height: 12),
+
+            // Step 7: Demonstrates the setState bug.
             const BuggyCounter(),
           ],
         ),
@@ -280,3 +284,56 @@ class _BuggyCounterState extends State<BuggyCounter> {
 // Step 7 Q: Before fixing the bug, what happened after three taps?
 // A: _clicks was 9 internally, but the screen still displayed 0.
 // Reason: setState() was missing, so Flutter did not rebuild the widget.
+
+// Step 8: Countdown timer using Timer.periodic.
+class Countdown extends StatefulWidget {
+  const Countdown({super.key});
+
+  @override
+  State<Countdown> createState() => _CountdownState();
+}
+
+class _CountdownState extends State<Countdown> {
+  late int _left;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Start the countdown using the seeded startSeconds value.
+    _left = startSeconds;
+
+    // Update the remaining time every second.
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _left--;
+      });
+
+      // Stop the timer when the countdown reaches zero.
+      if (_left <= 0) {
+        timer.cancel();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // Cancel the timer when the widget is removed.
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_left > 0) {
+      return Text('Time left: $_left s', key: const Key('time-left'));
+    }
+
+    return const Text('Time is up!', key: Key('time-left'));
+  }
+}
+
+// Step 8 Q: Why must dispose() cancel the timer?
+// A: It prevents the timer from continuing after the widget is removed,
+// avoiding setState() being called after disposal.
