@@ -74,6 +74,9 @@ class HomePage extends StatelessWidget {
                 Text('Max: $maxCount', key: const Key('info-max')),
               ],
             ),
+            const SizedBox(height: 12),
+
+            GoalBanner(count: startCount, max: maxCount),
           ],
         ),
       ),
@@ -128,3 +131,29 @@ class StudentCard extends StatelessWidget {
 ///Step::2
 // Q--: What happens if final is removed?
 // A: The fields become mutable
+
+// --->>Step 4:
+class GoalBanner extends StatelessWidget {
+  final int count;
+  final int max;
+
+  const GoalBanner({super.key, required this.count, required this.max});
+
+  @override
+  Widget build(BuildContext context) {
+    final percent = count * 100 ~/ max;
+
+    return Text(
+      'Progress: $count of $max ($percent%)',
+      key: const Key('progress'),
+    );
+  }
+}
+
+// Step: 4--Q: Why does GoalBanner not need setState?
+
+// A: It is a StatelessWidget. It displays the count and max
+// passed to it without maintaining changing state of its own.
+//
+// Q: What would you do to show a new count?
+// A: Pass the updated count to GoalBanner from a parent widget that rebuilds when the count changes.
