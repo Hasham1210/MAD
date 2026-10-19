@@ -78,6 +78,10 @@ class HomePage extends StatelessWidget {
 
             // Step 5: Tally manages its own changing count.
             const Tally(),
+            const SizedBox(height: 12),
+
+            // Step 7: Demonstrates the missing setState bug.
+            const BuggyCounter(),
           ],
         ),
       ),
@@ -173,9 +177,7 @@ class Tally extends StatefulWidget {
 class _TallyState extends State<Tally> {
   int _count = startCount;
 
-  // Task 5.3: Increase the count and rebuild the UI.
-
-  //TASK ## 6.1::
+  // TASK 6.1: Increase the count without exceeding maxCount.
   void _plus() {
     setState(() {
       _count += stepSize;
@@ -187,6 +189,7 @@ class _TallyState extends State<Tally> {
     });
   }
 
+  // TASK 6.2: Decrease the count without going below zero.
   void _minus() {
     setState(() {
       _count -= stepSize;
@@ -197,6 +200,7 @@ class _TallyState extends State<Tally> {
     });
   }
 
+  // TASK 6.2: Restore the original count.
   void _reset() {
     setState(() {
       _count = startCount;
@@ -210,7 +214,6 @@ class _TallyState extends State<Tally> {
       children: [
         Text('Count: $_count', key: const Key('count')),
         GoalBanner(count: _count, max: maxCount),
-
         Row(
           children: [
             ElevatedButton(
@@ -241,3 +244,39 @@ class _TallyState extends State<Tally> {
 // Why are there two classes?
 // A: Tally defines the widget configuration, while _TallyState
 // stores mutable data and updates the UI using setState().
+
+// Step 7: Stateful widget with an intentional setState bug.
+class BuggyCounter extends StatefulWidget {
+  const BuggyCounter({super.key});
+
+  @override
+  State<BuggyCounter> createState() => _BuggyCounterState();
+}
+
+class _BuggyCounterState extends State<BuggyCounter> {
+  int _clicks = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text('Bug clicks: $_clicks', key: const Key('bug-text')),
+        const SizedBox(width: 12),
+        ElevatedButton(
+          key: const Key('bug-button'),
+          onPressed: () {
+            // Step 7.2: Fixed by wrapping the update in setState().
+            setState(() {
+              _clicks += bugStep;
+            });
+          },
+          child: Text('+$bugStep'),
+        ),
+      ],
+    );
+  }
+}
+
+// Step 7 Q: Before fixing the bug, what happened after three taps?
+// A: _clicks was 9 internally, but the screen still displayed 0.
+// Reason: setState() was missing, so Flutter did not rebuild the widget.
