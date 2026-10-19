@@ -76,13 +76,15 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            GoalBanner(count: startCount, max: maxCount),
+            // Step 5: Tally manages its own changing count.
+            const Tally(),
           ],
         ),
       ),
     );
   }
 }
+
 // Q:--Step## 03:
 // Draw the widget tree from LabApp to Text('Max: ...').
 //
@@ -120,6 +122,7 @@ class StudentCard extends StatelessWidget {
     );
   }
 }
+
 //Q: step 1:
 // Ans::: runApp receives widget (LabApp) while MaterialApp's home specifies
 // the widget displayed as the main screen (HomePage).
@@ -157,3 +160,48 @@ class GoalBanner extends StatelessWidget {
 //
 // Q: What would you do to show a new count?
 // A: Pass the updated count to GoalBanner from a parent widget that rebuilds when the count changes.
+
+// Step 5: Stateful widget configuration.
+class Tally extends StatefulWidget {
+  const Tally({super.key});
+
+  @override
+  State<Tally> createState() => _TallyState();
+}
+
+// Step 5: State object stores and updates the changing count.
+class _TallyState extends State<Tally> {
+  int _count = startCount;
+
+  // Task 5.3: Increase the count and rebuild the UI.
+  void _plus() {
+    setState(() {
+      _count += stepSize;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Count: $_count', key: const Key('count')),
+        GoalBanner(count: _count, max: maxCount),
+        Row(
+          children: [
+            ElevatedButton(
+              key: const Key('plus'),
+              onPressed: _plus,
+              child: Text('+$stepSize'),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+// Q: The Tally class has no changing fields, but _TallyState does.
+// Why are there two classes?
+// A: Tally defines the widget configuration, while _TallyState
+// stores mutable data and updates the UI using setState().
