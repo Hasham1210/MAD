@@ -57,10 +57,35 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Study Tracker: $course')),
-      body: StudentCard(name: studentName, roll: rollNo, course: course),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            StudentCard(name: studentName, roll: rollNo, course: course),
+            const SizedBox(height: 12),
+
+            // Row displays the seeded information horizontally.
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Start: $startCount', key: const Key('info-start')),
+                Text('Step: $stepSize', key: const Key('info-step')),
+                Text('Max: $maxCount', key: const Key('info-max')),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
+// Q:--Step## 03:
+// Draw the widget tree from LabApp to Text('Max: ...').
+//
+// A: LabApp -> MaterialApp -> HomePage -> Scaffold ->
+// SingleChildScrollView -> Column -> Row -> Text('Max: ...').
+// Text('Max: ...') is 7 parent-child edges below LabApp.
 
 // Stateless: displays student information passed to it.
 class StudentCard extends StatelessWidget {
@@ -102,4 +127,4 @@ class StudentCard extends StatelessWidget {
 
 ///Step::2
 // Q--: What happens if final is removed?
-// A: The fields become mutable  
+// A: The fields become mutable
