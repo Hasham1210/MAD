@@ -124,6 +124,8 @@ class HomePage extends StatelessWidget {
 
   const Clock(),
   const SizedBox(height: 12),
+
+  const InfoPanel(),
 //Step## 04:
   const SwapBoard(),
 ],
@@ -132,6 +134,43 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
+//Step## 06::
+class InfoPanel extends StatelessWidget {
+  const InfoPanel({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          key: const Key('info-row'),
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text('Start: $startSec s', key: const Key('row-a')),
+            Text('Tick: $tick s', key: const Key('row-b')),
+            Text('Stop: $stopAt s', key: const Key('row-c')),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Column(
+          key: const Key('info-col'),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Name: $studentName', key: const Key('col-a')),
+            Text('Roll no: $rollNo', key: const Key('col-b')),
+            Text('Course: $course', key: const Key('col-c')),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+
+
+
 
 // Provided: shows your personalized numbers. Do not rename.
 class SettingsCard extends StatelessWidget {
@@ -399,5 +438,9 @@ class _SwapBoardState extends State<SwapBoard> {
 // are easier to reuse, understand, and maintain for fruther..
 
 //Step # 05:
+// Without keys, Flutter matches each widget by position, so its Element
+// and State stay on the left even when the label changes.
+
+//Step## 06::
 // Without keys, Flutter matches each widget by position, so its Element
 // and State stay on the left even when the label changes.
