@@ -115,15 +115,24 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SettingsCard(),
-            const SizedBox(height: 12),
+       children: [
+  const SettingsCard(),
+  const SizedBox(height: 12),
 
-            const Clock(),
+  const Welcome(),
+  const SizedBox(height: 12),
 
-            // Add each new widget below the previous one,
-            // following the order specified in the lab.
-          ],
+  const Clock(),
+  const SizedBox(height: 12),
+//Step## 04:
+  Row(
+    children: [
+      Tile(tileA),
+      Tile(tileB),
+      Tile(tileC),
+    ],
+  ),
+],
         ),
       ),
     );
@@ -289,6 +298,48 @@ class Probe extends StatelessWidget {
     );
   }
 }
+//PART ## 04::
+class Welcome extends StatelessWidget {
+  const Welcome({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        'Welcome, $studentName',
+        key: const Key('welcome'),
+      ),
+    );
+  }
+} 
+
+//PART ## 04:
+class Tile extends StatefulWidget {
+  final String label;
+
+  const Tile(this.label, {super.key});
+
+  @override
+  State<Tile> createState() => _TileState();
+}
+
+class _TileState extends State<Tile> {
+  int taps = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        setState(() {
+          taps++;
+        });
+      },
+      child: Text('${widget.label}: $taps'),
+    );
+  }
+}
+
+
 
 //Step-1:
 // We start the Timer in initState because it runs only once.If we start it in build, multiple
@@ -303,3 +354,8 @@ class Probe extends StatelessWidget {
 
 // Widget is cheap and can be replaced during rebuilding. Element stays in the 
 //tree and keeps the State. RenderObject handles layout and painting what we see on the screen.
+
+
+//Step# 04:
+// This is called composition. Flutter prefers it because small widgets
+// are easier to reuse, understand, and maintain for fruther..
