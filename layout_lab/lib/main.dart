@@ -37,7 +37,6 @@ final String tileC = names[(u + 4) % 6];
 final int tapsToMake = 2 + t % 3; // used by the experiment in Step 5
 // Step 6: axes (the NAMES are printed on the settings card; you type the enum)
 final String mainName = mains[u % 6];
-Layout and lifecycle: Team Board lab Page 4
 final String crossName = crosses[t % 3];
 // Step 8: Expanded and Flexible
 final double fixedW = 70.0 + 10 * u;
@@ -87,7 +86,7 @@ class HomePage extends StatelessWidget {
  );
  }
 }
-Layout and lifecycle: Team Board lab Page 5
+
 // ---- Provided: shows YOUR numbers. Keep it on the page. Do not rename.
 class SettingsCard extends StatelessWidget {
  const SettingsCard({super.key});
@@ -96,8 +95,7 @@ class SettingsCard extends StatelessWidget {
  return Text(
  'YOUR SETTINGS (seed $seed)\n'
  'clock: start $startSec, tick $tick, stop at $stopAt\n'
- 'tiles: $tileA, $tileB, $tileC (taps for the Step 5 experiment:
-$tapsToMake)\n'
+ 'tiles: $tileA, $tileB, $tileC (taps for the Step 5 experiment: $tapsToMake)\n'
  'row main axis: $mainName | column cross axis: $crossName\n'
  'flex: $flexA and $flexB | fixed width: ${fixedW.toStringAsFixed(0)}\n'
  'box: margin $boxMargin, padding $boxPad, radius $boxRadius, '
@@ -116,8 +114,7 @@ class SummaryRow extends StatelessWidget {
  return Row(
  children: [
  Text(
- 'Part A: read the widget tree of the $course board from top to
-bottom.',
+ 'Part A: read the widget tree of the $course board from top to bottom.',
  key: const Key('sum-a'),
  ),
  Text(
@@ -125,8 +122,7 @@ bottom.',
  key: const Key('sum-b'),
  ),
  Text(
- 'Part C: break the layout on purpose, then fix it with Expanded or
-Wrap.',
+ 'Part C: break the layout on purpose, then fix it with Expanded orWrap.',
  key: const Key('sum-c'),
  ),
  ],
