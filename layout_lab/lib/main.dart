@@ -226,23 +226,80 @@ class _ClockState extends State<Clock> {
     super.dispose();
   }
 
+  //TASK## 03:
+@override
+Widget build(BuildContext context) {
+  _builds++;
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'Session: $_seconds s',
+        key: const Key('clock'),
+      ),
+      Text(
+        'Builds: $_builds',
+        key: const Key('builds'),
+      ),
+      Probe(seconds: _seconds),
+    ],
+  );
+}
+
+}
+
+
+//TASK ###03:
+
+class Probe extends StatelessWidget {
+  final int seconds;
+
+  const Probe({super.key, required this.seconds});
+
   @override
   Widget build(BuildContext context) {
-    _builds++;
+    final above =
+        context.findAncestorWidgetOfExactType<Scaffold>() != null;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Session: $_seconds s',
-          key: const Key('clock'),
+          'Seen at: $seconds s',
+          key: const Key('probe-seen'),
         ),
         Text(
-          'Builds: $_builds',
-          key: const Key('builds'),
+          'Widget #${identityHashCode(this)}',
+          key: const Key('probe-widget'),
+        ),
+        Text(
+          'Element #${identityHashCode(context)}',
+          key: const Key('probe-element'),
+        ),
+        Text(
+          'Context belongs to: ${context.widget.runtimeType}',
+          key: const Key('probe-context'),
+        ),
+        Text(
+          'Scaffold above me: $above',
+          key: const Key('probe-above'),
         ),
       ],
     );
   }
 }
 
+//Step-1:
+// We start the Timer in initState because it runs only once.If we start it in build, multiple
+// Timers may start and the clock will run too fast.
+
+//Step-2:
+// Builds increases once per second because each timer tick calls setState once.
+// Without cancelling the Timer in dispose we may get
+// setState() method  being called after dispose().
+
+//Step-3:
+
+// Widget is cheap and can be replaced during rebuilding. Element stays in the 
+//tree and keeps the State. RenderObject handles layout and painting what we see on the screen.
