@@ -442,5 +442,5 @@ class _SwapBoardState extends State<SwapBoard> {
 // and State stay on the left even when the label changes.
 
 //Step## 06::
-// Without keys, Flutter matches each widget by position, so its Element
-// and State stay on the left even when the label changes.
+// In a Column, the main axis is vertical. The cross axis is horizontal,
+// so CrossAxisAlignment.center moves children left or right.
