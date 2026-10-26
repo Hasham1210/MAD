@@ -125,13 +125,7 @@ class HomePage extends StatelessWidget {
   const Clock(),
   const SizedBox(height: 12),
 //Step## 04:
-  Row(
-    children: [
-      Tile(tileA),
-      Tile(tileB),
-      Tile(tileC),
-    ],
-  ),
+  const SwapBoard(),
 ],
         ),
       ),
@@ -338,9 +332,53 @@ class _TileState extends State<Tile> {
     );
   }
 }
+//Sterp## 05::
 
+class SwapBoard extends StatefulWidget {
+  const SwapBoard({super.key});
 
+  @override
+  State<SwapBoard> createState() => _SwapBoardState();
+}
 
+class _SwapBoardState extends State<SwapBoard> {
+  late List<Tile> tiles;
+
+  @override
+  void initState() {
+    super.initState();
+
+    tiles = [
+      Tile(tileA, key: ValueKey(tileA)),
+      Tile(tileB, key: ValueKey(tileB)),
+      Tile(tileC, key: ValueKey(tileC)),
+    ];
+  }
+
+  void swap() {
+    setState(() {
+      tiles = tiles.reversed.toList();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(children: tiles),
+        ElevatedButton(
+          key: const Key('swap'),
+          onPressed: swap,
+          child: const Text('Swap'),
+        ),
+      ],
+    );
+  }
+}
+
+//---------------------------------ANSWERS----------------------------//
+//---------------------------------ANSWERS----------------------------//
+//---------------------------------ANSWERS----------------------------//
 //Step-1:
 // We start the Timer in initState because it runs only once.If we start it in build, multiple
 // Timers may start and the clock will run too fast.
@@ -359,3 +397,7 @@ class _TileState extends State<Tile> {
 //Step# 04:
 // This is called composition. Flutter prefers it because small widgets
 // are easier to reuse, understand, and maintain for fruther..
+
+//Step # 05:
+// Without keys, Flutter matches each widget by position, so its Element
+// and State stay on the left even when the label changes.
