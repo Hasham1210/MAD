@@ -129,12 +129,56 @@ class HomePage extends StatelessWidget {
 //Step## 04:
   const SwapBoard(),
   const SummaryRow(),
+  const ShareRow(),
 ],
         ),
       ),
     );
   }
 }
+
+
+
+
+//Step## 08::
+class ShareRow extends StatelessWidget {
+  const ShareRow({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      key: const Key('share-row'),
+      children: [
+        SizedBox(
+          key: const Key('fixed'),
+          width: fixedW,
+          child: ElevatedButton(
+            onPressed: () {},
+            child: const Text('F'),
+          ),
+        ),
+        Expanded(
+          flex: flexA,
+          child: ElevatedButton(
+            key: const Key('exp'),
+            onPressed: () {},
+            child: const Text('Exp'),
+          ),
+        ),
+        Flexible(
+          flex: flexB,
+          child: ElevatedButton(
+            key: const Key('flex'),
+            onPressed: () {},
+            child: const Text('Flex'),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
 
 //Step## 06::
 class InfoPanel extends StatelessWidget {
@@ -456,3 +500,7 @@ class _SwapBoardState extends State<SwapBoard> {
 //Step## 07::
 // Constraints go down and sizes go up. Expanded limits each Text to its
 // share of the Row's width, allowing the words to wrap instead of overflow.
+
+//Step## 08::
+// Expanded fills its allocated space, while Flexible can use less.
+// Expanded is Flexible with fit: FlexFit.tight.
