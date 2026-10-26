@@ -128,6 +128,7 @@ class HomePage extends StatelessWidget {
   const InfoPanel(),
 //Step## 04:
   const SwapBoard(),
+  const SummaryRow(),
 ],
         ),
       ),
@@ -200,6 +201,9 @@ class SettingsCard extends StatelessWidget {
 }
 
 // Provided for Step 7. It overflows on purpose. Do not rename.
+
+
+//Step### 07::
 class SummaryRow extends StatelessWidget {
   const SummaryRow({super.key});
 
@@ -207,27 +211,31 @@ class SummaryRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(
-          'Part A: read the widget tree of the $course '
-          'board from top to bottom.',
-          key: const Key('sum-a'),
+        Expanded(
+          child: Text(
+            'Part A: read the widget tree of the $course '
+            'board from top to bottom.',
+            key: const Key('sum-a'),
+          ),
         ),
-        Text(
-          'Part B: build each box from small widgets and never extend a '
-          'built-in class.',
-          key: const Key('sum-b'),
+        Expanded(
+          child: Text(
+            'Part B: build each box from small widgets and never extend a '
+            'built-in class.',
+            key: const Key('sum-b'),
+          ),
         ),
-        Text(
-          'Part C: break the layout on purpose, then fix it with '
-          'Expanded or Wrap.',
-          key: const Key('sum-c'),
+        Expanded(
+          child: Text(
+            'Part C: break the layout on purpose, then fix it with '
+            'Expanded or Wrap.',
+            key: const Key('sum-c'),
+          ),
         ),
       ],
     );
   }
 }
-
-
 //PART### 01::
 
 class Clock extends StatefulWidget {
@@ -444,3 +452,7 @@ class _SwapBoardState extends State<SwapBoard> {
 //Step## 06::
 // In a Column, the main axis is vertical. The cross axis is horizontal,
 // so CrossAxisAlignment.center moves children left or right.
+
+//Step## 07::
+// Constraints go down and sizes go up. Expanded limits each Text to its
+// share of the Row's width, allowing the words to wrap instead of overflow.
